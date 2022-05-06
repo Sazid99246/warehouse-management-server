@@ -35,7 +35,7 @@ async function run() {
         })
 
         // delete a product
-        app.get('/product/:id', async(req, res)=>{
+        app.delete('/product/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)}
             const result = await pcCollection.deleteOne(query);
