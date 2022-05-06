@@ -18,17 +18,28 @@ async function run() {
         await client.connect();
         const pcCollection = client.db("pcCollection").collection("pc");
 
+        // send all products
         app.get('/product', async(req, res) => {
             const query = {};
             const cursor = pcCollection.find(query);
             const products = await cursor.toArray();
             res.send(products);
         })
+
+        // send single product
         app.get('/product/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)}
             const product = await pcCollection.findOne(query);
             res.send(product);
+        })
+
+        // delete a product
+        app.get('/product/:id', async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const result = await pcCollection.deleteOne(query);
+            res.send(result);
         })
     }
     finally {
