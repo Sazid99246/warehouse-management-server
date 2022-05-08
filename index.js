@@ -17,6 +17,7 @@ async function run() {
     try {
         await client.connect();
         const pcCollection = client.db("pcCollection").collection("pc");
+        const reviewCollection = client.db("pcCollection").collection("reviews");
 
         // send all products
         app.get('/product', async(req, res) => {
@@ -47,6 +48,22 @@ async function run() {
             const query = {_id: ObjectId(id)}
             const result = await pcCollection.deleteOne(query);
             res.send(result);
+        })
+
+        // send all reviews
+        app.get('/review', async(req, res)=>{
+            const query = {};
+            const cursor = reviewCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+ 
+        })
+        //send single review
+        app.get('/review/:id', async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const review = await reviewCollection.findOne(query);
+            res.send(review);
         })
     }
     finally {
